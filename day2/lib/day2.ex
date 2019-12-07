@@ -10,12 +10,40 @@ defmodule Day2 do
   end
 
   def run() do
-    input1202 =
-      input()
-      |> List.replace_at(1, 12)
-      |> List.replace_at(2, 2)
-    result = process(input1202)
-    IO.puts(Enum.join(result, ","))
+    part2()
+  end
+
+  def part1 do
+    input()
+    |> List.replace_at(1, 12)
+    |> List.replace_at(2, 2)
+    |> process
+    |> Enum.join(",")
+    |> IO.puts
+  end
+
+  def part2 do
+    {noun, verb} = nouns_and_verbs()
+    |> Enum.find(&(test_noun_verb(&1, input())))
+
+    IO.puts(100 * noun + verb)
+  end
+
+  def nouns_and_verbs() do
+    nouns = 0..99
+    verbs = 0..99
+    Enum.flat_map(nouns, fn n -> Enum.map(verbs, fn v -> {n, v} end) end)
+  end
+
+
+  def test_noun_verb({noun, verb}, input) do
+    result = input
+    |> List.replace_at(1, noun)
+    |> List.replace_at(2, verb)
+    |> process
+    |> Enum.at(0)
+
+    result == 19690720
   end
 
   def process(input) when is_list(input), do: process({:ok, input}, 0)
