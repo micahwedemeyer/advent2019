@@ -80,10 +80,7 @@ defmodule Day3 do
   def path_to_string(path), do: Enum.map(path, &("{#{elem(&1, 0)}, #{elem(&1, 1)}}")) |> Enum.join(",")
 
   def manhattan_distance({x, y}), do: abs(x) + abs(y)
-
-  def wireline_distance(_, []), do: :wtf # Error!
-  def wireline_distance({x, y}, [{x,y} | _tail]), do: 1 # A bit strange that it's not zero, but the last path step counts
-  def wireline_distance({x, y}, [_hd | tail]), do: 1 + wireline_distance({x,y}, tail)
+  def wireline_distance(point, path), do: Enum.find_index(path, &(&1 == point)) + 1
 
   def walk_directions(input_list), do: walk_directions({0,0}, input_list) |> Enum.reverse
   def walk_directions(_, []), do: []
