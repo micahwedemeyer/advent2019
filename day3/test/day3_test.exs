@@ -20,4 +20,8 @@ defmodule Day3Test do
     assert Day3.coord_list({-1, 0}, :D, 2) == [{-1,-2}, {-1,-1}]
     assert Day3.coord_list({3, 0}, :L, 2) == [{1,0}, {2,0}]
   end
+
+  test "walk directions" do
+    assert Day3.walk_directions([{:U, 2}, {:R,2}]) == [{2, 2}, {1, 2}, {0, 2}, {0, 1}]
+  end
 end
