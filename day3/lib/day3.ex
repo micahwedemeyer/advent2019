@@ -81,6 +81,7 @@ defmodule Day3 do
 
   def manhattan_distance({x, y}), do: abs(x) + abs(y)
 
+  def wireline_distance(_, []), do: :wtf # Error!
   def wireline_distance({x, y}, [{x,y} | _tail]), do: 1 # A bit strange that it's not zero, but the last path step counts
   def wireline_distance({x, y}, [_hd | tail]), do: 1 + wireline_distance({x,y}, tail)
 
