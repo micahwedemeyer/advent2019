@@ -21,20 +21,46 @@ defmodule Day3 do
   end
 
   def run do
+    part2()
+  end
+
+  def part2 do
     i1 = parse_input(input1())
     i2 = parse_input(input2())
 
-    best_intersection(i1, i2)
+    p1 = walk_directions(i1)
+    p2 = walk_directions(i2)
+
+    int = best_wireline_intersection(i1, i2)
+    distance = wireline_distance(int, p1) + wireline_distance(int, p2)
+    IO.puts(distance)
+  end
+
+  def part1 do
+    i1 = parse_input(input1())
+    i2 = parse_input(input2())
+
+    best_manhattan_intersection(i1, i2)
     |> manhattan_distance
     |> IO.puts
   end
 
-  def best_intersection(i1, i2) do
+  def best_wireline_intersection(i1, i2) do
+    min_fn = fn(int, p1, p2) -> wireline_distance(int, p1) + wireline_distance(int, p2) end
+    best_intersection(i1, i2, min_fn)
+  end
+
+  def best_manhattan_intersection(i1, i2) do
+    min_fn = fn(int, _p1, _p2) -> manhattan_distance(int) end
+    best_intersection(i1, i2, min_fn)
+  end
+
+  def best_intersection(i1, i2, min_fn) do
     path1 = walk_directions(i1)
     path2 = walk_directions(i2)
 
     find_intersections(path1, path2)
-    |> Enum.min_by(&manhattan_distance/1)
+    |> Enum.min_by(&(min_fn.(&1, path1, path2)))
   end
 
   def parse_input(input) do
@@ -51,9 +77,14 @@ defmodule Day3 do
     ) |> MapSet.to_list
   end
 
+  def path_to_string(path), do: Enum.map(path, &("{#{elem(&1, 0)}, #{elem(&1, 1)}}")) |> Enum.join(",")
+
   def manhattan_distance({x, y}), do: abs(x) + abs(y)
 
-  def walk_directions(input_list), do: walk_directions({0,0}, input_list)
+  def wireline_distance({x, y}, [{x,y} | _tail]), do: 1 # A bit strange that it's not zero, but the last path step counts
+  def wireline_distance({x, y}, [_hd | tail]), do: 1 + wireline_distance({x,y}, tail)
+
+  def walk_directions(input_list), do: walk_directions({0,0}, input_list) |> Enum.reverse
   def walk_directions(_, []), do: []
   def walk_directions({start_x, start_y}, [{direction, distance} | tail]) do
     path = coord_list({start_x, start_y}, direction, distance)

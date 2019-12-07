@@ -22,7 +22,8 @@ defmodule Day3Test do
   end
 
   test "walk directions" do
-    assert Day3.walk_directions([{:U, 2}, {:R,2}]) == [{2, 2}, {1, 2}, {0, 2}, {0, 1}]
+    assert Day3.walk_directions({0,0}, [{:U, 2}, {:R,2}]) == [{2, 2}, {1, 2}, {0, 2}, {0, 1}]
+    assert Day3.walk_directions([{:U, 2}, {:R,2}]) == [{2, 2}, {1, 2}, {0, 2}, {0, 1}] |> Enum.reverse
   end
 
   test "find intersections" do
@@ -39,13 +40,32 @@ defmodule Day3Test do
     assert Day3.manhattan_distance({-1, -1}) == 2
   end
 
-  test "best_intersection" do
+  test "best_manhattan_intersection" do
     p1 = Day3.parse_input("R75,D30,R83,U83,L12,D49,R71,U7,L72")
     p2 = Day3.parse_input("U62,R66,U55,R34,D71,R55,D58,R83")
-    assert Day3.manhattan_distance(Day3.best_intersection(p1, p2)) == 159
+    assert Day3.manhattan_distance(Day3.best_manhattan_intersection(p1, p2)) == 159
 
     p1 = Day3.parse_input("R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51")
     p2 = Day3.parse_input("U98,R91,D20,R16,D67,R40,U7,R15,U6,R7")
-    assert Day3.manhattan_distance(Day3.best_intersection(p1, p2)) == 135
+    assert Day3.manhattan_distance(Day3.best_manhattan_intersection(p1, p2)) == 135
+  end
+
+  test "wireline_distance" do
+    p1 = Day3.walk_directions(Day3.parse_input("R8,U5,L5,D3"))
+    p2 = Day3.walk_directions(Day3.parse_input("U7,R6,D4,L4"))
+    int1 = {3,3}
+    int2 = {6,5}
+
+    assert Day3.wireline_distance(int1, p1) == 20
+    assert Day3.wireline_distance(int1, p2) == 20
+    assert Day3.wireline_distance(int2, p1) == 15
+    assert Day3.wireline_distance(int2, p2) == 15
+  end
+
+  test "best_wireline_intersection" do
+    i1 = Day3.parse_input("R8,U5,L5,D3")
+    i2 = Day3.parse_input("U7,R6,D4,L4")
+
+    assert Day3.best_wireline_intersection(i1, i2) == {6,5}
   end
 end
