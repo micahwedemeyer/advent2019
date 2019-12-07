@@ -24,4 +24,28 @@ defmodule Day3Test do
   test "walk directions" do
     assert Day3.walk_directions([{:U, 2}, {:R,2}]) == [{2, 2}, {1, 2}, {0, 2}, {0, 1}]
   end
+
+  test "find intersections" do
+    path1 = [{0,0}, {0,1}, {0,2}]
+    path2 = [{1,1}, {1,0}, {0,0}, {0,1}]
+
+    assert Day3.find_intersections(path1, path2) == [{0,0}, {0,1}]
+  end
+
+  test "manhattan distance" do
+    assert Day3.manhattan_distance({0,0}) == 0
+    assert Day3.manhattan_distance({3,0}) == 3
+    assert Day3.manhattan_distance({6,6}) == 12
+    assert Day3.manhattan_distance({-1, -1}) == 2
+  end
+
+  test "best_intersection" do
+    p1 = Day3.parse_input("R75,D30,R83,U83,L12,D49,R71,U7,L72")
+    p2 = Day3.parse_input("U62,R66,U55,R34,D71,R55,D58,R83")
+    assert Day3.manhattan_distance(Day3.best_intersection(p1, p2)) == 159
+
+    p1 = Day3.parse_input("R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51")
+    p2 = Day3.parse_input("U98,R91,D20,R16,D67,R40,U7,R15,U6,R7")
+    assert Day3.manhattan_distance(Day3.best_intersection(p1, p2)) == 135
+  end
 end

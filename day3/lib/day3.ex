@@ -24,9 +24,17 @@ defmodule Day3 do
     i1 = parse_input(input1())
     i2 = parse_input(input2())
 
-    walk_directions(i1)
-    |> Enum.count()
+    best_intersection(i1, i2)
+    |> manhattan_distance
     |> IO.puts
+  end
+
+  def best_intersection(i1, i2) do
+    path1 = walk_directions(i1)
+    path2 = walk_directions(i2)
+
+    find_intersections(path1, path2)
+    |> Enum.min_by(&manhattan_distance/1)
   end
 
   def parse_input(input) do
@@ -35,6 +43,15 @@ defmodule Day3 do
     |> Enum.map(&({String.at(&1, 0), String.slice(&1, 1, String.length(&1) - 1)}))
     |> Enum.map(fn {x,y} -> {String.to_atom(x), String.to_integer(y)} end)
   end
+
+  def find_intersections(path1, path2) do
+    MapSet.intersection(
+      MapSet.new(path1),
+      MapSet.new(path2)
+    ) |> MapSet.to_list
+  end
+
+  def manhattan_distance({x, y}), do: abs(x) + abs(y)
 
   def walk_directions(input_list), do: walk_directions({0,0}, input_list)
   def walk_directions(_, []), do: []
