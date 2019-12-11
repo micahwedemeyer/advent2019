@@ -1,14 +1,22 @@
 defmodule IntCode2Test do
   use ExUnit.Case
 
+  test "addition" do
+    assert IntCode2.int_code([1, {:p, 4}, {:i, 3}, {:p, 4}], [1002,4,3,4,33], 0) == {:cont, {[1002,4,3,4,36], 4}}
+  end
+
+  test "multipication" do
+    assert IntCode2.int_code([2, {:p, 4}, {:i, 3}, {:p, 4}], [1002,4,3,4,33], 0) == {:cont, {[1002,4,3,4,99], 4}}
+  end
+
   test "parses instruction sets" do
     assert IntCode2.parse_instruction(1002) == [2, :p, :i, :p]
     assert IntCode2.parse_instruction(1) == [1, :p, :p, :p]
     assert IntCode2.parse_instruction(99) == [99]
   end
 
-  test "interprets parameters" do
-    assert IntCode2.find_params([1,2,3,4,5,6,7], 2, {2, :p, :i, :p}) == {2, {:p, 4}, {:i, 5}, {:p, 6}}
+  test "interpolate_params" do
+    assert IntCode2.interpolate_params([2, :p, :i, :p], [1002,4,3,4,33], 0) == [2, {:p, 4}, {:i, 3}, {:p, 4}]
   end
 
   test "digit_count" do
