@@ -49,33 +49,9 @@ defmodule Day2 do
   def process(input) when is_list(input), do: process({:ok, input}, 0)
   def process({:ok, input}, position) do
     op = Enum.at(input, position)
-    res = int_code(input, op, position)
+    res = IntCode.int_code(input, op, position)
     process(res, position + 4)
   end
 
   def process({:halt, result}, _), do: result
-
-  def int_code(input, 1, position) do
-    [op1, op2, res] = int_code_params(input, position)
-    val = Enum.at(input, op1) + Enum.at(input, op2)
-    {:ok, List.replace_at(input, res, val)}
-  end
-
-  def int_code(input, 2, position) do
-    [op1, op2, res] = int_code_params(input, position)
-    val = Enum.at(input, op1) * Enum.at(input, op2)
-    {:ok, List.replace_at(input, res, val)}
-  end
-
-  def int_code(input, 99, _position) do
-    {:halt, input}
-  end
-
-  def int_code_params(input, position) do
-    [
-      Enum.at(input, position + 1),
-      Enum.at(input, position + 2),
-      Enum.at(input, position + 3)
-    ]
-  end
 end
