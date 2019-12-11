@@ -20,15 +20,22 @@ defmodule Day4Test do
     assert !Day4.is_increasing(123234)
   end
 
-  test "has_double" do
-    assert Day4.has_double(111111)
-    assert Day4.has_double(123321)
-    assert Day4.has_double(123455)
-    assert Day4.has_double(987664)
+  test "has_repeat" do
+    assert Day4.has_repeat(111111)
+    assert Day4.has_repeat(123321)
+    assert Day4.has_repeat(123455)
+    assert Day4.has_repeat(987664)
 
-    assert !Day4.has_double(123456)
-    assert !Day4.has_double(987654)
-    assert !Day4.has_double(121212)
-    assert !Day4.has_double(123123)
+    assert !Day4.has_repeat(123456)
+    assert !Day4.has_repeat(987654)
+    assert !Day4.has_repeat(121212)
+    assert !Day4.has_repeat(123123)
+  end
+
+  test "has_double" do
+    assert Day4.has_double(112233)
+    assert Day4.has_double(111122)
+
+    assert !Day4.has_double(123444)
   end
 end
